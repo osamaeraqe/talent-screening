@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # Identity Postgres
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: camunda
+      POSTGRES_PASSWORD: camunda
+      POSTGRES_DB: identity
+    ports:
+      - "5433:5432"   # Host 5433 mapped to container 5432
+    volumes:
+      - postgres-identity-data:/var/lib/postgresql/data
+
+  # App PostgreSQL for Talent Screening DB
+  app-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppassword
+      POSTGRES_DB: talent_screening
+    ports:
+      - "5432:5432"   # Host 5432 mapped to container 5432
+    volumes:
+      - postgres-app-data:/var/lib/postgresql/data
+
+  # Identity service
+  identity:
+    image: camunda/identity:8.5.0
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/identity
+      - SPRING_DATASOURCE_USERNAME=camunda
+      - SPRING_DATASOURCE_PASSWORD=camunda
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-identity-data:
+  postgres-app-data:
