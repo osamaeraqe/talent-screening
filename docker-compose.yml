@@ -1,42 +1,51 @@
 version: '3.8'
 
 services:
-  # Identity Postgres
   postgres:
-    image: postgres:15
+    image: postgres:16
+    container_name: camunda-postgres
     environment:
       POSTGRES_USER: camunda
       POSTGRES_PASSWORD: camunda
-      POSTGRES_DB: identity
+      POSTGRES_DB: camunda
     ports:
-      - "5433:5432"   # Host 5433 mapped to container 5432
+      - "5432:5432"
     volumes:
-      - postgres-identity-data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 
-  # App PostgreSQL for Talent Screening DB
-  app-db:
-    image: postgres:15
+  zeebe:
+    image: camunda/zeebe:8.5.4
+    container_name: zeebe
     environment:
-      POSTGRES_USER: appuser
-      POSTGRES_PASSWORD: apppassword
-      POSTGRES_DB: talent_screening
+      ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME: io.camunda.zeebe.exporter.debug.DebugExporter
+      ZEEBE_BROKER_DATA_PARTITIONSCOUNT: "1"
+      ZEEBE_BROKER_CLUSTER_PARTITIONSCOUNT: "1"
     ports:
-      - "5432:5432"   # Host 5432 mapped to container 5432
-    volumes:
-      - postgres-app-data:/var/lib/postgresql/data
+      - "26500:26500"
 
-  # Identity service
-  identity:
-    image: camunda/identity:8.5.0
-    ports:
-      - "8084:8084"
+  operate:
+    image: camunda/operate:8.5.4
+    container_name: camunda-operate
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/identity
-      - SPRING_DATASOURCE_USERNAME=camunda
-      - SPRING_DATASOURCE_PASSWORD=camunda
-    depends_on:
-      - postgres
+      CAMUNDA_OPERATE_ZEEBE_GATEWAYADDRESS: zeebe:26500
+    ports:
+      - "8081:8080"
+
+  tasklist:
+    image: camunda/tasklist:8.5.4
+    container_name: camunda-tasklist
+    environment:
+      CAMUNDA_TASKLIST_ZEEBE_GATEWAYADDRESS: zeebe:26500
+    ports:
+      - "8082:8080"
+
+  optimize:
+    image: camunda/optimize:8.5.4
+    container_name: camunda-optimize
+    environment:
+      OPTIMIZE_ZEEBE_GATEWAY: zeebe:26500
+    ports:
+      - "8083:8080"
 
 volumes:
-  postgres-identity-data:
-  postgres-app-data:
+  pgdata:
