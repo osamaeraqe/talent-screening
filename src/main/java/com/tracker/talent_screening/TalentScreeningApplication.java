@@ -41,5 +41,6 @@ public class TalentScreeningApplication implements CommandLineRunner {
 				.send()
 				.join();
 		LOG.info("started a process instance: {}", event.getProcessInstanceKey());
+		System.out.println("Hello Osama!");
 	}
 }
