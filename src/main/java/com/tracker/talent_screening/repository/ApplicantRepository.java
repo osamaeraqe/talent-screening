@@ -10,15 +10,35 @@ import java.util.Optional;
 @Repository
 public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
 
-    // You can add custom queries here if needed
+    /**
+ * Find an applicant by their email address.
+ *
+ * @param email the email address to search for
+ * @return an Optional containing the Applicant with the given email, or Optional.empty() if none found
+ */
     Optional<Applicant> findByEmail(String email);
 
-    // Example: Find applicants by job id
+    /**
+ * Finds all applicants who applied to the job with the given ID.
+ *
+ * @param jobId the identifier of the applied job
+ * @return a list of matching Applicant entities; an empty list if no applicants are found
+ */
     List<Applicant> findByApplyedJobId(Long jobId);
 
-    // Example: Find applicants by status
+    /**
+ * Finds all applicants that have the specified status ID.
+ *
+ * @param statusId the status identifier to match applicants against
+ * @return a list of Applicants with the given status; empty if none match
+ */
     List<Applicant> findByStatusId(Long statusId);
 
-    // Find applicant By ProcessInstance Id
+    /**
+ * Finds an Applicant by its workflow/process instance identifier.
+ *
+ * @param processInstanceId the process instance identifier associated with the Applicant
+ * @return an Optional containing the Applicant with the given processInstanceId, or Optional.empty() if none is found
+ */
     Optional<Applicant> findByprocessInstanceId(String processInstanceId);
 }

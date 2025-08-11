@@ -11,7 +11,13 @@ import java.util.Optional;
 @Repository
 public interface ApplicantStatusRepository extends JpaRepository<ApplicantStatus, Integer> {
 
-    Optional<ApplicantStatus> findByName(String name);
+    /**
+ * Finds an ApplicantStatus by its name.
+ *
+ * @param name the status name to search for
+ * @return an Optional containing the matching ApplicantStatus, or Optional.empty() if none found
+ */
+Optional<ApplicantStatus> findByName(String name);
 
 
 }

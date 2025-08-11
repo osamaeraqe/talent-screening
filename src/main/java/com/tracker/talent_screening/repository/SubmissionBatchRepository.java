@@ -8,7 +8,19 @@ import java.util.Optional;
 
 @Repository
 public interface SubmissionBatchRepository extends JpaRepository<SubmissionBatch, Long> {
-    Optional<SubmissionBatch> findByBatchNumber(String batchNumber);
+    /**
+ * Finds a SubmissionBatch with the given batch number.
+ *
+ * @param batchNumber the batch number to search for
+ * @return an Optional containing the matching SubmissionBatch, or empty if none is found
+ */
+Optional<SubmissionBatch> findByBatchNumber(String batchNumber);
 
-    Optional<SubmissionBatch> findByProcessInstanceId(String processInstanceId);
+    /**
+ * Retrieves a SubmissionBatch by its process instance ID.
+ *
+ * @param processInstanceId the process instance identifier associated with the batch
+ * @return an Optional containing the matching SubmissionBatch if present, otherwise Optional.empty()
+ */
+Optional<SubmissionBatch> findByProcessInstanceId(String processInstanceId);
 }

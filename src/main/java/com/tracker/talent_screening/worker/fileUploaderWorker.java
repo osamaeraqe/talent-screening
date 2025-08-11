@@ -40,6 +40,18 @@ public class fileUploaderWorker {
     @Autowired
     private JobRepository jobRepository;
 
+    /**
+     * Processes an Excel file of applicants, persists each row as application-related entities,
+     * and starts a Zeebe workflow instance ("cv_evaluation") for each row.
+     *
+     * <p>For each row in the first sheet the method:
+     * - saves applicant, job, status and document records (via repository calls), and
+     * - creates a Zeebe process instance with the row's name and email as variables.
+     *
+     * @param job the activated Zeebe job that triggered this worker
+     * @return a map containing processing results; contains the key "completedCount" with the number of rows processed
+     * @throws IOException if the Excel file cannot be read or closed
+     */
     @JobWorker(type = "process-excel-file")
     public Map<String , Object> processExcelFile(ActivatedJob job) throws IOException {
         String filePath = "C:/Users/osama/OneDrive/Desktop/hrSheet.xlsx";
@@ -73,6 +85,19 @@ public class fileUploaderWorker {
 
     }
 
+    /**
+     * Creates and persists an Applicant, an associated Job, and an ApplicantDocument from the given Excel row.
+     *
+     * <p>Extracts fields from the row in this order: name (cell 0), email (cell 1), phone (cell 2),
+     * department (cell 3), status code (cell 4), CV link (cell 5). The method:
+     * - resolves ApplicantStatus by name and sets it on the Applicant,
+     * - creates and saves a Job and associates it with the Applicant,
+     * - saves the Applicant,
+     * - creates and saves an ApplicantDocument with the CV link and current timestamp linked to the Applicant.</p>
+     *
+     * @param row the Apache POI Row containing applicant data as described above
+     * @throws java.util.NoSuchElementException if no ApplicantStatus is found for the status code extracted from the row
+     */
     private void saveApplicants(Row row) {
         String name = row.getCell(0).getStringCellValue();
         String email = row.getCell(1).getStringCellValue();
