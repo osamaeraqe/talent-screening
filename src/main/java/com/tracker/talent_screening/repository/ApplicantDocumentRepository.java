@@ -8,7 +8,14 @@ import java.util.Optional;
 
 public interface ApplicantDocumentRepository  extends JpaRepository<ApplicantDocument, Integer> {
 
-    Optional<ApplicantDocument> findByApplicantId(Long applicantId);
+    /**
+ * Finds an ApplicantDocument associated with the given applicant ID.
+ *
+ * @param applicantId the primary key of the applicant to match
+ * @return an Optional containing the matching ApplicantDocument, or Optional.empty() if none found
+ * @implNote If multiple documents exist for the same applicantId, the persistence provider may throw a runtime exception. 
+ */
+Optional<ApplicantDocument> findByApplicantId(Long applicantId);
 
 
 }

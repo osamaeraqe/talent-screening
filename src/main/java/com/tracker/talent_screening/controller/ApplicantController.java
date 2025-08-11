@@ -16,6 +16,15 @@ public class ApplicantController {
     private static final Logger LOG = LoggerFactory.getLogger(ApplicantController.class);
     @Autowired private ApplicantService applicantService;
 
+    /**
+     * Handles POST requests to start the HR process for an applicant.
+     *
+     * Delegates to ApplicantService.startHrProcess() and returns its result.
+     *
+     * The returned String is used as the MVC view name (or response body depending on controller configuration).
+     *
+     * @return the view name or response produced by ApplicantService.startHrProcess()
+     */
     @PostMapping("/start")
     public String startHrProcess(){
         return applicantService.startHrProcess();

@@ -13,6 +13,14 @@ public class ApplicantService {
     private ZeebeClient zeebeClient;
     private static final Logger LOG = LoggerFactory.getLogger(ApplicantService.class);
 
+    /**
+     * Starts an HR process instance in Zeebe for the "hr_upload" BPMN and returns its BPMN process id.
+     *
+     * This method creates a new process instance using the latest deployed version, sets a single
+     * process variable "total" to 100, and waits synchronously for the instance to be created.
+     *
+     * @return the BPMN process id of the created process instance
+     */
     public String startHrProcess() {
         var bpmnProcessId = "hr_upload";
         var event = zeebeClient.newCreateInstanceCommand()

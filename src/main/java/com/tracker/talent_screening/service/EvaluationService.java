@@ -22,6 +22,15 @@ public class EvaluationService {
     @Autowired
     private ApplicantDocumentRepository applicantDocumentRepository;
 
+    /**
+     * Extracts and returns text from the applicant's PDF associated with the given process instance id.
+     *
+     * Looks up the Applicant by processInstanceId, retrieves that applicant's document, constructs a File
+     * from the document's file path, and returns the text extracted from the PDF.
+     *
+     * @param processId the process instance id used to locate the Applicant
+     * @return the text extracted from the applicant's PDF file
+     */
     public String prepForAutoEvaluation(String processId){
 
         Applicant applicant = applicantRepository.findByprocessInstanceId(processId).get();
