@@ -23,4 +23,7 @@ public class ApplicationAudit {
 
     @Column(name = "timestamp")
     private LocalDateTime timestamp;
+
+
+
 }
