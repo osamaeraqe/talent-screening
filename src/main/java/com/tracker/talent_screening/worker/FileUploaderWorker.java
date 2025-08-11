@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-public class fileUploaderWorker {
+public class FileUploaderWorker {
     @Autowired
     private ZeebeClient zeebeClient;
 
@@ -89,8 +89,8 @@ public class fileUploaderWorker {
 
 
 
-        ApplicantStatus applicantStatus = new ApplicantStatus();
-        applicantStatus =   applicantStatusRepository.findByName(statusCode).get();
+        ApplicantStatus applicantStatus = applicantStatusRepository.findByName(statusCode)
+                            .orElseThrow(() -> new IllegalArgumentException("ApplicantStatus not found for code: " + statusCode));
 
 
 

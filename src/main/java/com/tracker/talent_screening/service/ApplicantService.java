@@ -10,18 +10,27 @@ import java.util.Map;
 
 @Service
 public class ApplicantService {
-    private ZeebeClient zeebeClient;
+    private final ZeebeClient zeebeClient;
     private static final Logger LOG = LoggerFactory.getLogger(ApplicantService.class);
+
+    public ApplicantService(ZeebeClient zeebeClient) {
+                this.zeebeClient = zeebeClient;
+            }
 
     public String startHrProcess() {
         var bpmnProcessId = "hr_upload";
-        var event = zeebeClient.newCreateInstanceCommand()
-                .bpmnProcessId(bpmnProcessId)
-                .latestVersion()
-                .variables(Map.of("total", 100))
-                .send()
-                .join();
-        LOG.info("started a process instance: {}", event.getProcessInstanceKey());
-        return event.getBpmnProcessId();
+        try {
+                        var event = zeebeClient.newCreateInstanceCommand()
+                                        .bpmnProcessId(bpmnProcessId)
+                                        .latestVersion()
+                                        .variables(Map.of("total", 100))
+                                        .send()
+                                        .join();
+                        LOG.info("Started process instance: {}", event.getProcessInstanceKey());
+                        return String.valueOf(event.getProcessInstanceKey());
+                    } catch (Exception e) {
+                        LOG.error("Failed to start process {}", bpmnProcessId, e);
+                        throw e;
+                    }
     }
 }

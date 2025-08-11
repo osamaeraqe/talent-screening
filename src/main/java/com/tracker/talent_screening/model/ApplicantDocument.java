@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class ApplicantDocument {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne

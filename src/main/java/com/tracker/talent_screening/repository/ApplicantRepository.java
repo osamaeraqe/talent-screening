@@ -20,5 +20,5 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Long> {
     List<Applicant> findByStatusId(Long statusId);
 
     // Find applicant By ProcessInstance Id
-    Optional<Applicant> findByprocessInstanceId(String processInstanceId);
+    Optional<Applicant> findByProcessInstanceId(String processInstanceId);
 }

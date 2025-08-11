@@ -17,20 +17,19 @@ import java.util.Set;
 public class Employee {
 
     @Id
-    Long EmployeeId ;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long employeeId ;
 
 
     @Column
     String name ;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
+    @JoinColumn(name = "manager_id", nullable = true)
+    private Employee manager;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "employee_roles", joinColumns = @JoinColumn(name = "employee_id"))
-    @Column(name = "role")
-    private Set<String> roles = new HashSet<>();
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<EmployeeRoles> roles = new HashSet<>();
 
 
 }

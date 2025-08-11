@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface ApplicantDocumentRepository  extends JpaRepository<ApplicantDocument, Integer> {
 
-    Optional<ApplicantDocument> findByApplicantId(Long applicantId);
-
+    Optional<ApplicantDocument> findFirstByApplicant_IdOrderByUploadedAtDesc(Long applicantId);
 
 }
