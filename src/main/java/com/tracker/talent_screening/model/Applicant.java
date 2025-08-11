@@ -30,4 +30,11 @@ public class Applicant {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "batch_id")
+    private SubmissionBatch submissionBatch;
+
+    @Column(name = "process_instance_id", unique = true)
+    private String processInstanceId;
 }
